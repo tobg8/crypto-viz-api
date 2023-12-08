@@ -9,7 +9,6 @@ const handleArticlesListening = async (PB, response) => {
   await sendInitialRecords();
 
   const subscriptionCallback = (e) => {
-    console.log(e.record);
     const article = {
       id: e.record.id,
       collectionName: e.record.collectionName,

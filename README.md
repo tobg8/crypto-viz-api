@@ -6,3 +6,6 @@ http://localhost:3000/articles
 
 Get currencies
 http://localhost:3000/currencies
+
+Get currencies (SSE)
+http://localhost:3000/listings
