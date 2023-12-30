@@ -1,11 +1,12 @@
 # crypto-viz-api (SSE)
+
 routes are real time and accessible via http
 
 Get articles (SSE)
-http://localhost:3000/articles
+http://localhost:3001/articles
 
 Get currencies
-http://localhost:3000/currencies
+http://localhost:3001/currencies
 
 Get currencies (SSE)
-http://localhost:3000/listings
+http://localhost:3001/listings

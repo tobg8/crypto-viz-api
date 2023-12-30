@@ -1,19 +1,21 @@
 const getCurrencies = async (PB) => {
-  const initialRecords = await PB.collection('currencies').getFullList({ sort: '-created' });
-  return initialRecords
-}
+  const initialRecords = await PB.collection("currencies").getFullList({
+    sort: "-created",
+  });
+  return initialRecords;
+};
 
 const handleListingsListening = async (PB, response) => {
   console.log("listings connection opened");
 
   try {
     // Fetch all listings
-    const allListings = await PB.collection('listing').getFullList({
-      sort: '-created',
+    const allListings = await PB.collection("listing").getFullList({
+      sort: "-created",
     });
 
     const currencyListingMap = new Map();
-    allListings.forEach(listing => {
+    allListings.forEach((listing) => {
       if (listing.currency_id) {
         const existingListing = currencyListingMap.get(listing.currency_id);
 
@@ -24,8 +26,11 @@ const handleListingsListening = async (PB, response) => {
     });
 
     const sendInitialRecords = async () => {
-      currencyListingMap.forEach((e) => response.write(`data: ${JSON.stringify(e)})\n\n`))
-    }
+      const initialData = Array.from(currencyListingMap.values()).sort(
+        (a, b) => a.market_cap_rank - b.market_cap_rank
+      );
+      response.write(`data: ${JSON.stringify(initialData)}\n\n`);
+    };
     await sendInitialRecords();
 
     const subscriptionCallback = (e) => {
@@ -52,22 +57,22 @@ const handleListingsListening = async (PB, response) => {
         atl_date: e.record.atl_date,
         currency_id: e.record.currency_id,
         created: e.record.created,
-        updated: e.record.updated
+        updated: e.record.updated,
       };
-      response.write(`data: ${JSON.stringify(listing)}\n\n`);
+      response.write(`data: ${JSON.stringify([listing])}\n\n`);
     };
 
-    PB.collection('listing').subscribe('*', subscriptionCallback);
+    PB.collection("listing").subscribe("*", subscriptionCallback);
 
     const closeListener = () => {
       console.log("listings connection closed");
-      PB.collection('listing').unsubscribe('*', subscriptionCallback);
+      PB.collection("listing").unsubscribe("*", subscriptionCallback);
     };
 
-    response.on('close', closeListener);
-    response.on('error', (err) => {
+    response.on("close", closeListener);
+    response.on("error", (err) => {
       console.error("SSE response error:", err);
-      PB.collection('listing').unsubscribe('*', subscriptionCallback);
+      PB.collection("listing").unsubscribe("*", subscriptionCallback);
     });
   } catch (error) {
     // Handle errors
@@ -77,5 +82,5 @@ const handleListingsListening = async (PB, response) => {
 
 export default {
   getCurrencies,
-  handleListingsListening
-}
+  handleListingsListening,
+};

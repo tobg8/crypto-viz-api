@@ -1,5 +1,5 @@
-import init from '../repository/init.js'
-import repository from '../repository/articles.js'
+import init from "../repository/init.js";
+import repository from "../repository/articles.js";
 
 const getArticles = async (_, response) => {
   const PB = init.createPocketBaseClient();
@@ -10,5 +10,5 @@ const getArticles = async (_, response) => {
 };
 
 export default {
-  getArticles
+  getArticles,
 };
