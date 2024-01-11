@@ -1,9 +1,7 @@
 const getCurrencies = async (PB) => {
-  const initialRecords = await PB.collection("currencies").getFullList({
-    sort: "-created",
-  });
-  return initialRecords;
-};
+  const initialRecords = await PB.collection('currency').getFullList({ sort: '-created' });
+  return initialRecords
+}
 
 const handleListingsListening = async (PB, response) => {
   console.log("listings connection opened");
