@@ -3,7 +3,7 @@ import repository from "../repository/currencies.js"
 
 const getCurrencies = async (_, response) => {
   const PB = init.createPocketBaseClient();
-  const currencies = await PB.collection('currency').getFullList({ sort: '-created' });
+  const currencies = await repository.getCurrencies(PB)
   return response.status(200).json(currencies)
 };
 
