@@ -25,7 +25,11 @@ const getPrices = async (req, response) => {
     defaultRange = "ALL"
   }
 
-  await repository.handlePricesListening(PB, response, symbol, defaultRange, range);
+  if (chartType === "ohlc") {
+    await repository.handleOhlcListening(PB, response, symbol, defaultRange, range)
+  } else {
+    await repository.handlePricesListening(PB, response, symbol, defaultRange, range);
+  }
 };
 
 export default {
