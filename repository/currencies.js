@@ -3,6 +3,11 @@ const getCurrencies = async (PB) => {
   return initialRecords
 }
 
+const getCurrencyIDBySymbol = async (PB, symbol) => {
+  const initialRecords = await PB.collection('currency').getFullList({ sort: '-created', filter:`symbol = '${symbol}'`});
+  return initialRecords[0].id
+}
+
 const handleListingsListening = async (PB, response) => {
   console.log("listings connection opened");
 
@@ -81,4 +86,5 @@ const handleListingsListening = async (PB, response) => {
 export default {
   getCurrencies,
   handleListingsListening,
+  getCurrencyIDBySymbol
 };

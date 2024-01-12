@@ -10,3 +10,6 @@ http://localhost:3001/currencies
 
 Get currencies (SSE)
 http://localhost:3001/listings
+
+Get prices
+http://localhost:3001/prices/:symbol/:chartType/:range"
