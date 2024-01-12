@@ -5,7 +5,7 @@ const getCurrencies = async (PB) => {
 
 const getCurrencyIDBySymbol = async (PB, symbol) => {
   const initialRecords = await PB.collection('currency').getFullList({ sort: '-created', filter:`symbol = '${symbol}'`});
-  return initialRecords[0].id
+  return initialRecords[0]?.id
 }
 
 const handleListingsListening = async (PB, response) => {
