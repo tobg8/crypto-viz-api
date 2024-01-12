@@ -1,14 +1,17 @@
 import express from "express";
 import article from "./controllers/article.js";
 import currencies from "./controllers/currencies.js";
+import prices from "./controllers/prices.js";
 
 const router = express.Router();
 
 router.get("/articles", article.getArticles);
 router.get("/currencies", currencies.getCurrencies);
 router.get("/listings", currencies.getListings);
+router.get("/prices/:symbol/:chartType/:range", prices.getPrices);
 
 router.use((req, res) => {
+  console.log(req.url)
   res
     .status(404)
     .send("Service does not exists\nSee : https://doc.localhost.api");
