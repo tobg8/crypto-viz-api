@@ -13,3 +13,6 @@ http://localhost:3001/listings
 
 Get prices
 http://localhost:3001/prices/:symbol/:chartType/:range"
+
+Get search trendings
+http://localhost:3001/search/trending
