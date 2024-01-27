@@ -11,7 +11,7 @@ http://localhost:3001/currencies
 Get currencies (SSE)
 http://localhost:3001/listings
 
-Get prices
+Get prices (SSE)
 http://localhost:3001/prices/:symbol/:chartType/:range"
 
 Get search trendings
