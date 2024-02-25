@@ -10,6 +10,7 @@ router.get("/articles", article.getArticles);
 router.get("/currencies", currencies.getCurrencies);
 router.get("/listings", currencies.getListings);
 router.get("/prices/:symbol/:chartType/:range", prices.getPrices);
+router.get("/ohlc/:symbol/:chartType/:range", prices.getOhlc);
 router.get("/search/trending", trends.getCurrencies)
 
 router.use((req, res) => {
