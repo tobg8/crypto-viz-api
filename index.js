@@ -9,7 +9,11 @@ dotenv.config();
 const app = express();
 const PORT = 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}
+));
 app.use(router);
 
 app.listen(PORT, () => {
