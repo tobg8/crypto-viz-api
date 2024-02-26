@@ -2,8 +2,12 @@ import currencyRepository from './currencies.js'
 
 const handlePricesListening = async (PB, response, symbol, defaultRange, range) => {
   console.log(`price connection opened for currency ${symbol} on range ${defaultRange}`)
-
-  const currencyID = await currencyRepository.getCurrencyIDBySymbol(PB, symbol)
+  let currencyID = "b2tcsymh4sr503g"
+  try {
+     currencyID = await currencyRepository.getCurrencyIDBySymbol(PB, symbol)
+  } catch (error) {
+    console.log(error)
+  }
 
   const filter = `range = '${defaultRange}' && currency = '${currencyID}' `;
 
@@ -24,7 +28,12 @@ const handlePricesListening = async (PB, response, symbol, defaultRange, range) 
 
   const subscriptionCallback = async (e) => {
     const record = e.record;
-    const currencyID = await currencyRepository.getCurrencyIDBySymbol(PB, symbol)
+    let currencyID = "b2tcsymh4sr503g"
+    try {
+       currencyID = await currencyRepository.getCurrencyIDBySymbol(PB, symbol)
+    } catch (error) {
+      console.log(error)
+    }
 
 
     if (record.currency === currencyID && record.range === defaultRange ) {

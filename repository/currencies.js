@@ -4,8 +4,12 @@ const getCurrencies = async (PB) => {
 }
 
 const getCurrencyIDBySymbol = async (PB, symbol) => {
-  const initialRecords = await PB.collection('currency').getFullList({ sort: '-created', filter:`symbol = '${symbol}'`});
-  return initialRecords[0]?.id
+  try {
+    const initialRecords = await PB.collection('currency').getFullList({ sort: '-created', filter:`symbol = '${symbol}'`});
+    return initialRecords[0]?.id
+ } catch (error) {
+   console.log(error)
+ }
 }
 
 const handleListingsListening = async (PB, response) => {
@@ -36,6 +40,15 @@ const handleListingsListening = async (PB, response) => {
     };
     await sendInitialRecords();
 
+
+    let buffer = []; // Buffer to store records to be sent after 3 minutes
+    const sendBufferedRecords = () => {
+      if (buffer.length > 0) {
+        response.write(`data: ${JSON.stringify(buffer)}\n\n`);
+        buffer = []; // Clear the buffer after sending
+      }
+    };
+
     const subscriptionCallback = (e) => {
       const listing = {
         id: e.record.id,
@@ -62,20 +75,24 @@ const handleListingsListening = async (PB, response) => {
         created: e.record.created,
         updated: e.record.updated,
       };
-      response.write(`data: ${JSON.stringify([listing])}\n\n`);
+      buffer.push(listing)
     };
 
     PB.collection("listing").subscribe("*", subscriptionCallback);
+    const intervalID = setInterval(sendBufferedRecords, 1 * 10 * 1000);
 
     const closeListener = () => {
       console.log("listings connection closed");
       PB.collection("listing").unsubscribe("*", subscriptionCallback);
+      clearInterval(intervalID);
+      buffer = []
     };
 
     response.on("close", closeListener);
     response.on("error", (err) => {
       console.error("SSE response error:", err);
       PB.collection("listing").unsubscribe("*", subscriptionCallback);
+      handleListingsListening(pb, response)
     });
   } catch (error) {
     // Handle errors
