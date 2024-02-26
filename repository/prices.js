@@ -32,7 +32,7 @@ const handlePricesListening = async (PB, response, symbol, defaultRange, range) 
     try {
        currencyID = await currencyRepository.getCurrencyIDBySymbol(PB, symbol)
     } catch (error) {
-      console.log(error)
+    
     }
 
 
@@ -69,12 +69,15 @@ const handlePricesListening = async (PB, response, symbol, defaultRange, range) 
 const handleOhlcListening = async (PB, response, symbol, defaultRange, range) => {
   console.log(`ohlc connection opened for currency ${symbol} on range ${defaultRange}`)
 
-  const currencyID = await currencyRepository.getCurrencyIDBySymbol(PB, symbol)
+  let currencyID = "b2tcsymh4sr503g"
+  try {
+     currencyID = await currencyRepository.getCurrencyIDBySymbol(PB, symbol)
+  } catch (error) {
+  }
 
   const filter = `range = '${defaultRange}' && currency = '${currencyID}' `;
   PB.autoCancellation(false);
   const sendInitialRecords = async () => {
-    console.log(filter)
     try {
       const initialRecords = await PB.collection("ohlc").getFullList({
         sort: "-timestamp",
@@ -91,8 +94,12 @@ const handleOhlcListening = async (PB, response, symbol, defaultRange, range) =>
 
   const subscriptionCallback = async (e) => {
     const record = e.record;
-    const currencyID = await currencyRepository.getCurrencyIDBySymbol(PB, symbol)
+    let currencyID = "b2tcsymh4sr503g"
+    try {
+       currencyID = await currencyRepository.getCurrencyIDBySymbol(PB, symbol)
+    } catch (error) {
 
+    }
 
     if (record.currency === currencyID && record.range === defaultRange ) {
       const ohlc = {
